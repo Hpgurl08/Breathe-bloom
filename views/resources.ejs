@@ -1,0 +1,74 @@
+<div class="container py-5 bg-light mt-2 mb-5 rounded">
+  <!-- Search for Therapists -->
+  <div class="search-therapists mt-5 text-center">
+    <h4 class="mx-auto">Find Local Therapists/Psychiatrist...</h4>
+    <form
+      method="GET"
+      action="/search"
+      class="form-inline my-2 my-lg-0 d-flex justify-content-center"
+    >
+      <input
+        class="form-control mr-sm-2 text-center"
+        type="search"
+        placeholder="Search by name, specialization, or location"
+        aria-label="Search"
+        name="query"
+        required
+      />
+      <!-- Hidden input for local search source -->
+      <input type="hidden" name="source" value="local" />
+      <!-- Local Search Button -->
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+        Local Search
+      </button>
+      <!-- Google Search Button -->
+      <button
+        class="btn btn-outline-primary my-2 my-sm-0"
+        type="button"
+        id="google-search-btn"
+      >
+        Google Search
+      </button>
+    </form>
+
+    <!-- Display search results -->
+    <% if (therapists && therapists.length > 0) { %> <%
+    therapists.forEach(therapist => { %>
+    <div class="col-md-12 m-2">
+      <div class="col-md-">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title"><%= therapist.name %></h5>
+            <p class="card-text">
+              Specialization: <%= therapist.specialization %>
+            </p>
+            <p class="card-text">Location: <%= therapist.location %></p>
+            <p class="card-text">Contact: <%= therapist.contact.email %></p>
+            <p class="card-text">Biography: <%= therapist.biography %></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% }); %> <% } else { %>
+    <!-- Display message if no local results found -->
+    <% if (result == 1) { %>
+    <div class="col-md-12">Nothing found.</div>
+    <% } %> <% } %>
+  </div>
+</div>
+
+<!-- Script to handle Google Search -->
+<script>
+  // JavaScript to handle Google Search button click
+  document
+    .getElementById("google-search-btn")
+    .addEventListener("click", function () {
+      // Get the query from the search input
+      const query = document.querySelector('input[name="query"]').value;
+
+      // Redirect to Google search route with query and source
+      window.location.href = `/search?query=${encodeURIComponent(
+        query
+      )}&source=google`;
+    });
+</script>

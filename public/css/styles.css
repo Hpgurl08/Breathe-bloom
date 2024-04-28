@@ -1,0 +1,41 @@
+a{
+    text-decoration: none !important;
+}
+
+.bg-success {
+  --bs-bg-opacity: 1;
+  background-color: gray !important;
+}
+
+.bg-body-tertiary {
+  --bs-bg-opacity: 1;
+  background-color: pink !important;
+}
+
+.btn-outline-success {
+  color: blue; 
+  border-color: pink ;
+  border-width: 2px;
+}
+
+
+.mcard {
+    display: flex !important;
+    flex-direction: column !important;
+   
+  }
+  .mcard-body {
+    flex: 1 !important;
+    height: 100vh !important;
+  }
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+   
+}
+
+ul{
+    list-style: none !important;
+}

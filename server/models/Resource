@@ -1,0 +1,50 @@
+const mongoose = require('mongoose');
+
+// Schema definition
+const therapistSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    specialization: {
+        type: String,
+        required: true
+    },
+    location: {
+        type: String,
+        required: true
+    },
+    contact: {
+        email: {
+            type: String,
+            required: true
+        },
+        phone: {
+            type: String,
+            required: false
+        }
+    },
+    available: {
+        type: Boolean,
+        default: true
+    },
+    ratings: {
+        type: Number,
+        min: 0,
+        max: 5,
+        default: 0
+    },
+    yearsOfExperience: {
+        type: Number,
+        required: false
+    },
+    biography: {
+        type: String,
+        required: false
+    }
+});
+
+// Model creation
+const Therapist = mongoose.model('Therapist', therapistSchema);
+
+module.exports = Therapist;

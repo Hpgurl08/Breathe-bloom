@@ -1,0 +1,132 @@
+<div
+  class="container-fluid d-flex align-items-center justify-content-center my-5 py-5"
+>
+  <div class="card p-3">
+    <form method="post" action="/register">
+      <div class="mb-3 mx-2">
+        <h1>Breathe-Bloom</h1>
+      </div>
+
+      <!-- Add an element to display error messages -->
+      <div class="mb-3" id="error-message"></div>
+
+      <div class="mb-3">
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Enter Full Name"
+            name="fullname"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="input-group">
+          <input
+            type="email"
+            class="form-control"
+            placeholder="Enter Email"
+            name="email"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="input-group">
+          <input
+            type="password"
+            class="form-control"
+            placeholder="Password"
+            name="password"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="input-group">
+          <input
+            type="password"
+            class="form-control"
+            placeholder="Confirm Password"
+            name="confirm_password"
+            required
+          />
+        </div>
+      </div>
+
+      <!-- Add security question dropdown -->
+      <div class="mb-3">
+        <label for="securityQuestion" class="form-label"
+          >Security Question</label
+        >
+        <select
+          class="form-select"
+          id="securityQuestion"
+          name="securityQuestion"
+          required
+        >
+          <option value="" selected disabled>Select a security question</option>
+          <option value="favorite_sport">What is your favorite sport?</option>
+          <option value="pet_name">What is your pet's name?</option>
+          <option value="mother_maiden_name">
+            What is your mother's maiden name?
+          </option>
+          <!-- Add more security questions here -->
+        </select>
+      </div>
+
+      <!-- Add answer to security question -->
+      <div class="mb-3">
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Answer to Security Question"
+            name="securityAnswer"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="row justify-content-center align-items-center">
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary btn-block w-100">
+            Sign Up
+          </button>
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-md-12">
+          <div>Already have an account?</div>
+        </div>
+      </div>
+      <div class="row justify-content-center align-items-center mt-2">
+        <div class="col-12">
+          <a href="/login" class="btn btn-outline-primary btn-block w-100"
+            >Login</a
+          >
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  window.onload = function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const errorMessage = urlParams.get("error");
+    if (errorMessage) {
+      const errorText =
+        {
+          email_exists: "Email already exists. Please use a different email.",
+          register_failure: "Failed to register. Please try again later.",
+        }[errorMessage] || "An unknown error occurred.";
+      const errorDiv = document.getElementById("error-message");
+      errorDiv.innerHTML = `<div class="alert alert-danger">${errorText}</div>`;
+    }
+  };
+</script>

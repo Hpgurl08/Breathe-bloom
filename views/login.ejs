@@ -1,0 +1,87 @@
+<!-- login.ejs -->
+<div
+  class="container-fluid d-flex align-items-center justify-content-center my-5 py-5"
+>
+  <div class="card p-3">
+    <form method="post" action="/login">
+      <div class="mb-3 mx-2">
+        <h1>Breathe-Bloom</h1>
+      </div>
+
+      <!-- Add an element to display error messages -->
+      <div class="mb-3" id="error-message"></div>
+
+      <div class="mb-3">
+        <div class="input-group">
+          <input
+            type="email"
+            class="form-control"
+            placeholder="Enter Email"
+            name="email"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="input-group">
+          <input
+            type="password"
+            class="form-control"
+            placeholder="Password"
+            name="password"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="row justify-content-center align-items-center">
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary btn-block w-100">
+            Login
+          </button>
+        </div>
+      </div>
+
+      <!-- Forgot Password link -->
+      <div class="row justify-content-center align-items-center mt-2 mb-3">
+        <div class="col-12">
+          <p class="text-center mb-0">
+            Forgot your password? <a href="/forgot-password">Reset it here</a>
+          </p>
+        </div>
+      </div>
+
+      <div class="row mt-2">
+        <div class="col-md-12">
+          <div>Don't have an account?</div>
+        </div>
+      </div>
+      <div class="row justify-content-center align-items-center mt-2 mb-3">
+        <div class="col-12">
+          <a href="/register" class="btn btn-outline-primary btn-block w-100"
+            >Create Account</a
+          >
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Add the JavaScript for displaying error messages -->
+<script>
+  window.onload = function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const errorMessage = urlParams.get("error");
+    if (errorMessage) {
+      const errorText =
+        {
+          user_not_found: "No user found with that email.",
+          invalid_credentials: "Invalid credentials, please try again.",
+          login_error: "Error occurred during login. Please try again later.",
+        }[errorMessage] || "An unknown error occurred.";
+      const errorDiv = document.getElementById("error-message");
+      errorDiv.innerHTML = `<div class="alert alert-danger">${errorText}</div>`;
+    }
+  };
+</script>
