@@ -1,89 +1,105 @@
 <div class="container py-5 bg-light mt-2 mb-5 rounded">
-  <div class="row">
-    <div class="col-md-6">
-      <h4 class="mx-4">Community Forum</h4>
-    </div>
-    <div class="col-md-6 d-flex align-items-center justify-content-center">
-      <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal"
-        >New Post</a
-      >
-    </div>
-  </div>
+  <!-- Iterate through posts -->
+  <% posts.forEach(entry => { %>
   <div class="row p-3">
-    <% posts.forEach(entry=> { %>
-
     <div class="col-md-3">
-      <div class="col-md-">
-        <div class="card m-2">
-          <!-- Remove image field -->
-          <div class="card-body">
-            <h5 class="card-title"><%= entry.title %></h5>
-            <p class="card-text"><%= entry.content %></p>
-          </div>
-          <div class="card-footer">
-            <a
-              href="#"
-              data-id="<%= entry._id %>"
-              data-bs-toggle="modal"
-              data-bs-target="#commentModal"
-              ><i class="bi bi-chat-fill"></i> <%= entry.commentsCount %>
-              comments</a
-            >
-          </div>
+      <div class="card m-2">
+        <div class="card-body">
+          <h5 class="card-title"><%= entry.title %></h5>
+          <p class="card-text">Posted by: <%= entry.username %></p>
+          <p class="card-text"><%= entry.content %></p>
+        </div>
+        <div class="card-footer">
+          <a href="#" class="show-comments" data-postid="<%= entry._id %>">
+            <i class="bi bi-chat-fill"></i> <%= entry.commentsCount %> comments
+          </a>
         </div>
       </div>
     </div>
-    <% }); %>
   </div>
-</div>
 
-<!-- Remove the modal for file input -->
-
-<!-- Modal for New Post -->
-<div
-  class="modal fade"
-  id="exampleModal"
-  tabindex="-1"
-  aria-labelledby="exampleModalLabel"
-  aria-hidden="true"
->
-  <form action="/forum" method="post">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">New Post</h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div class="modal-body">
-          <div class="form-group mb-3">
-            <input
-              name="title"
-              type="text"
-              class="form-control"
-              placeholder="Title"
-              required
-            />
-          </div>
-          <div class="form-group mb-3">
+  <!-- Section for adding comments -->
+  <div class="row p-3">
+    <div class="col-md-6 offset-md-3">
+      <div class="mb-3">
+        <h5>Add a Comment</h5>
+        <form action="/comments" method="post">
+          <input type="hidden" name="postId" value="<%= entry._id %>" />
+          <div class="form-group">
             <textarea
-              name="content"
-              type="text"
+              name="comment"
               class="form-control"
-              rows="6"
+              rows="3"
+              placeholder="Your comment"
               required
-              placeholder="Enter content..."
             ></textarea>
           </div>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary px-4">Post</button>
-        </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
       </div>
     </div>
-  </form>
+  </div>
+  <% }); %>
 </div>
+
+<!-- Modal for displaying comments -->
+<div
+  class="modal fade"
+  id="commentModal"
+  tabindex="-1"
+  aria-labelledby="commentModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="commentModalLabel">Comments</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body" id="commentModalBody">
+        <!-- Comments will be loaded dynamically here -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // Add event listener to show-comments links
+    document.querySelectorAll(".show-comments").forEach((link) => {
+      link.addEventListener("click", async () => {
+        const postId = link.dataset.postid;
+
+        try {
+          // Fetch comments for the selected post
+          const response = await fetch(`/comments?postId=${postId}`);
+          const comments = await response.json();
+
+          // Construct HTML for comments
+          let commentsHTML = "";
+          comments.forEach((comment) => {
+            commentsHTML += `
+              <div class="mb-3">
+                <p>${comment.comment}</p>
+                <p class="text-muted">Posted by: ${comment.username}</p>
+              </div>
+            `;
+          });
+
+          // Set HTML to the modal body
+          document.getElementById("commentModalBody").innerHTML = commentsHTML;
+
+          // Show the comment modal
+          $("#commentModal").modal("show");
+        } catch (error) {
+          console.error(error);
+        }
+      });
+    });
+  });
+</script>

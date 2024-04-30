@@ -1,16 +1,26 @@
 <div class="container py-5 bg-light mt-2 mb-5 rounded">
-    <h4 class="mx-4">Journal Entries</h4>
-    <div class="row p-3">
-        <% alljournals.forEach(entry=> { %>
-            <div class="col-md-12 m-2">
-                <div class="col-md-">
-                    <div class="card">
-                        <div class="card-body">
-                            <%= entry.entry %>
-                        </div>
-                    </div>
-                </div>
-            </div>
-         <% }); %>
+  <h4 class="mx-4">Journal Entries</h4>
+  <div class="row p-3">
+    <% alljournals.forEach(entry => { %>
+    <div class="col-md-12 m-2">
+      <div class="card">
+        <div class="card-body">
+          <p><%= entry.entry %></p>
+          <!-- Display journal entry -->
+          <% if (entry.media) { %>
+          <!-- Check if media URL exists -->
+          <p>Media: <a href="<%= entry.media %>"><%= entry.media %></a></p>
+          <!-- Display media URL if available -->
+          <% } %>
+          <!-- Add edit button with link to edit page -->
+          <a
+            href="/journal/edit/<%= entry._id %>"
+            class="btn btn-sm btn-primary ml-2"
+            >Edit</a
+          >
+        </div>
+      </div>
     </div>
+    <% }); %>
+  </div>
 </div>
