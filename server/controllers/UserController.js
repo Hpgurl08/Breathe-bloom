@@ -78,7 +78,7 @@ exports.loginUser = async (req, res) => {
 };
 
 exports.logoutUser = async (req, res) => {
-  delete req.session.token;
+  req.session.destroy();
   localStorage.removeItem("AUTH_TOKEN");
   return res.redirect("/login");
 };
