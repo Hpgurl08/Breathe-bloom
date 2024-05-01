@@ -51,7 +51,7 @@ exports.registerNewUser = async (req, res) => {
     // Save the new user to the database
     await newUser.save();
 
-    res.redirect("/login");
+    res.redirect("/");
   } catch (error) {
     console.log(error);
     // Redirect with error message if registration fails
@@ -63,24 +63,23 @@ exports.loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
-    if (!user)
-      return res.status(400).redirect("/login?error=invalid_credentials");
+    if (!user) return res.status(400).redirect("/?error=invalid_credentials");
     const isValidPassword = await bcrypt.compare(password, user.hash);
     if (!isValidPassword)
-      return res.status(400).redirect("/login?error=invalid_credentials");
+      return res.status(400).redirect("/?error=invalid_credentials");
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
     localStorage.setItem("AUTH_TOKEN", token);
     req.session.token = token;
-    return res.redirect("/");
+    return res.redirect("/home");
   } catch (error) {
-    res.status(500).send("/login?error=login_error");
+    res.status(500).send("/?error=login_error");
   }
 };
 
 exports.logoutUser = async (req, res) => {
   req.session.destroy();
   localStorage.removeItem("AUTH_TOKEN");
-  return res.redirect("/login");
+  return res.redirect("/");
 };
 
 exports.getForgotPasswordPage = async (req, res) => {
@@ -113,7 +112,7 @@ exports.resetPassword = async (req, res) => {
     await user.save();
     // Redirect to login page with success message
     return res.redirect(
-      `/login?message=Password_reset_successfully._Please_login_with_your_new_password`
+      `/?message=Password_reset_successfully._Please_login_with_your_new_password`
     );
   } catch (error) {
     console.error(error);
