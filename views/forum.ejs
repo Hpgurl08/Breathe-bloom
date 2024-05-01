@@ -1,4 +1,74 @@
+<!-- Modal for adding a new post -->
+<div
+  class="modal fade"
+  id="addPostModal"
+  tabindex="-1"
+  aria-labelledby="addPostModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addPostModalLabel">Add New Post</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form id="addPostForm" method="post" action="/forum">
+          <div class="mb-3">
+            <label for="postUsername" class="form-label">Username</label>
+            <input
+              type="text"
+              class="form-control"
+              id="postUsername"
+              name="username"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="postTitle" class="form-label">Title</label>
+            <input
+              type="text"
+              class="form-control"
+              id="postTitle"
+              name="title"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="postContent" class="form-label">Content</label>
+            <textarea
+              class="form-control"
+              id="postContent"
+              name="content"
+              rows="5"
+              required
+            ></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Post</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="container py-5 bg-light mt-2 mb-5 rounded">
+  <div class="row mb-3">
+    <div class="col-md-12">
+      <button
+        type="button"
+        class="btn btn-primary"
+        data-bs-toggle="modal"
+        data-bs-target="#addPostModal"
+      >
+        Add New Post
+      </button>
+    </div>
+  </div>
   <!-- Iterate through posts -->
   <% posts.forEach(entry => { %>
   <div class="row p-3">
@@ -7,6 +77,9 @@
         <div class="card-body">
           <h5 class="card-title"><%= entry.title %></h5>
           <p class="card-text">Posted by: <%= entry.username %></p>
+          <p class="card-text">
+            Date: <%= new Date(entry.createdAt).toDateString() %>
+          </p>
           <p class="card-text"><%= entry.content %></p>
         </div>
         <div class="card-footer">
@@ -101,5 +174,39 @@
         }
       });
     });
+  });
+
+  document.addEventListener("DOMContentLoaded", () => {
+    // Handle form submission for adding a new post
+    document
+      .getElementById("addPostForm")
+      .addEventListener("submit", async (event) => {
+        event.preventDefault(); // Prevent default form submission
+
+        const formData = new FormData(event.target); // Get form data
+        const title = formData.get("title");
+        const content = formData.get("content");
+        const username = formData.get("username"); // Get username
+
+        try {
+          // Send form data to the server to create a new post
+          const response = await fetch("/forum", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ title, content, username }), // Include username in the JSON payload
+          });
+
+          if (response.ok) {
+            // Refresh the page if post is successful
+            window.location.reload();
+          } else {
+            console.error("Failed to add post");
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      });
   });
 </script>

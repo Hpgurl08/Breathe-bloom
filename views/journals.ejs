@@ -12,6 +12,8 @@
           <p>Media: <a href="<%= entry.media %>"><%= entry.media %></a></p>
           <!-- Display media URL if available -->
           <% } %>
+          <!-- Display date -->
+          <p>Posted on: <%= entry.date.toDateString() %></p>
           <!-- Add edit button with link to edit page -->
           <a
             href="/journal/edit/<%= entry._id %>"
